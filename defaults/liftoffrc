@@ -1,7 +1,7 @@
 ############################################################################
 # The following keys can be used to configure defaults for project creation
 # project_name:
-# company:
+company: In The Pocket
 # author:
 # prefix:
 # company_identifier:
@@ -24,6 +24,10 @@ templates:
   - test.sh: bin/test
   - setup.sh: bin/setup
   - README.md: README.md
+  - build.gradle: build.gradle
+  - gradle.properties: gradle.properties
+  - In_the_Pocket_apps.mobileprovision: Signing/In_the_Pocket_apps.mobileprovision
+  - itpenterprise.p12: Signing/itpenterprise.p12
 
 warnings:
   - GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED
@@ -53,30 +57,46 @@ warnings:
 
 xcode_command: open -a 'Xcode' .
 
-project_template: swift
+project_template: objc
 
 app_target_templates:
   objc:
     - <%= project_name %>:
-      - Categories:
-      - Protocols:
-      - Headers:
+      - <%= prefix %>AppDelegate.h
+      - <%= prefix %>AppDelegate.m
+      - UI:
+        - Appearance:
+        - Views:
+        - ViewControllers:
+      - Services:
+        - API:
+        - Models:
+        - Managers:
+        - Database:
+      - Utilities:
       - Models:
       - ViewModels:
       - Controllers:
-        - <%= prefix %>AppDelegate.h
-        - <%= prefix %>AppDelegate.m
-      - Views:
-    - Resources:
-      - Images.xcassets
-      - Storyboards:
-        - Main.storyboard
-      - Nibs:
-        - LaunchScreen.xib
-      - Other-Sources:
-        - Info.plist
-        - <%= project_name %>-Prefix.pch
-        - main.m
+      - Resources:
+        - Fonts:
+        - Images.xcassets
+        - Storyboards:
+          - Main.storyboard
+        - Nibs:
+          - LaunchScreen.xib
+        - Other-Sources:
+          - Info.plist
+          - <%= project_name %>-Prefix.pch
+          - main.m
+          - Settings.bundle
+      - Configuration:
+        - Environments:
+          - production.plist
+          - staging.plist
+          - develop.plist
+        - <%= prefix %>Configuration.h
+        - <%= prefix %>Configuration.m
+      - Signing:
   swift:
     - <%= project_name %>:
       - Extensions:
