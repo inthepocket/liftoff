@@ -3,6 +3,7 @@ module Liftoff
     LATEST_IOS = 8.0
 
     attr_accessor :project_name,
+      :project_path,
       :company,
       :prefix,
       :configure_git,
@@ -18,7 +19,8 @@ module Liftoff
       :run_script_phases,
       :strict_prompts,
       :xcode_command,
-      :extra_config
+      :extra_config,
+      :abs_project_identifier
 
     attr_writer :author,
       :company_identifier,
@@ -35,6 +37,11 @@ module Liftoff
       end
 
       deprecations.finish
+    end
+
+    def project_name=(project_name)
+      @project_name = project_name
+      @project_path = File.join(Dir.pwd, project_name, "#{project_name}.xcodeproj")
     end
 
     def author
@@ -65,6 +72,10 @@ module Liftoff
       end
     end
 
+    def info_plist
+      "#{@project_name}/Resources/Other-Sources/Info.plist"
+    end
+
     def get_binding
       binding
     end
@@ -81,6 +92,10 @@ module Liftoff
 
     def normalized_company_name
       company.gsub(/[^0-9a-z]/i, '').downcase
+    end
+
+    def normalized_project_name
+      project_name.gsub(/[^0-9a-z]/i, '').downcase
     end
   end
 end
