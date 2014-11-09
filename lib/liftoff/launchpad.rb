@@ -46,7 +46,7 @@ module Liftoff
     end
 
     def install_cocoapods
-      CocoapodsSetup.new.install_cocoapods(@config.use_cocoapods)
+      CocoapodsSetup.new.install_cocoapods(@config)
     end
 
     def generate_templates

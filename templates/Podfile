@@ -1,13 +1,16 @@
 source 'https://github.com/CocoaPods/Specs'
+source 'https://bitbucket.org/inthepocket/itp-cocoapods-specs'
 
 platform :ios, '<%= deployment_target %>'
 
-# Add Application pods here
+# Dependencies
 
-target :unit_tests, :exclusive => true do
-  link_with 'UnitTests'
-  pod 'Specta'
-  pod 'Expecta'
-  pod 'OCMock'
-  pod 'OHHTTPStubs'
+pod 'ITPConfiguration'
+pod 'AFNetworking'
+
+# Copy acknowledgements to the Settings.bundle
+
+post_install do | installer |
+  require 'fileutils'
+  FileUtils.cp_r('Pods/Target Support Files/Pods/Pods-Acknowledgements.plist', '<%= project_name %>/Resources/Other-Sources/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
 end

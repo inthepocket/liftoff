@@ -1,7 +1,8 @@
 module Liftoff
   class CocoapodsSetup
-    def install_cocoapods(use_cocoapods)
-      if use_cocoapods
+    def install_cocoapods(project_configuration)
+      @project_configuration = project_configuration
+      if @project_configuration.use_cocoapods
         if pod_installed?
           move_podfile
           run_pod_install
@@ -18,7 +19,7 @@ module Liftoff
     end
 
     def move_podfile
-      FileManager.new.generate('Podfile', 'Podfile')
+      FileManager.new.generate('Podfile', 'Podfile', @project_configuration)
     end
 
     def run_pod_install
