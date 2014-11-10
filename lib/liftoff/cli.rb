@@ -42,6 +42,10 @@ module Liftoff
           @options[:configure_git] = configure_git
         end
 
+        opts.on('--[no-]crashlytics', 'Enable/Disable Crashlytics') do |use_crashlytics|
+          @options[:use_crashlytics] = use_crashlytics
+        end
+
         opts.on('--no-open', "Don't open Xcode after generation") do
           @options[:xcode_command] = false
         end
