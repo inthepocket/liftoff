@@ -13,9 +13,10 @@ module Liftoff
 
         file_manager.create_project_dir(@config.project_name) do
           generate_project
-          install_cocoapods
+          generate_podfile
           generate_templates
           install_crashlytics
+          install_pods
           perform_project_actions
           open_project
         end
@@ -38,6 +39,7 @@ module Liftoff
     def perform_project_actions
       set_indentation_level
       enable_warnings
+      enable_other_warnings
       treat_warnings_as_errors
       add_script_phases
       enable_static_analyzer
@@ -46,16 +48,20 @@ module Liftoff
       generate_git
     end
 
-    def install_cocoapods
-      CocoapodsSetup.new.install_cocoapods(@config)
+    def generate_podfile
+      CocoapodsSetup.new(@config).generate_podfile
     end
-    
+
+    def install_pods
+      CocoapodsSetup.new(@config).install_pods
+    end
+
     def install_crashlytics
-        CrashlyticsSetup.new.install_crashlytics(@config, @config.use_crashlytics)
+        CrashlyticsSetup.new(@config).install_crashlytics
     end
 
     def generate_templates
-      TemplateGenerator.new.generate_templates(@config, file_manager)
+      TemplateGenerator.new(@config).generate_templates(file_manager)
     end
 
     def generate_project
@@ -80,6 +86,10 @@ module Liftoff
 
     def enable_warnings
       xcode_helper.enable_warnings(@config.warnings)
+    end
+
+    def enable_other_warnings
+      xcode_helper.enable_other_warnings(@config.other_warnings)
     end
 
     def perform_extra_config

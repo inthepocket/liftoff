@@ -3,14 +3,14 @@ source 'https://bitbucket.org/inthepocket/itp-cocoapods-specs'
 
 platform :ios, '<%= deployment_target %>'
 
-# Dependencies
-
-pod 'ITPConfiguration'
-pod 'AFNetworking'
-
 # Copy acknowledgements to the Settings.bundle
 
 post_install do | installer |
   require 'fileutils'
   FileUtils.cp_r('Pods/Target Support Files/Pods/Pods-Acknowledgements.plist', '<%= project_name %>/Resources/Other-Sources/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
 end
+
+# Dependencies
+
+pod 'ITPConfiguration'
+pod 'AFNetworking'

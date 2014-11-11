@@ -8,13 +8,15 @@ module Liftoff
 
     # methods
 
-    def install_crashlytics(config, use_crashlytics)
+    def initialize(config)
       @config = config
+    end
 
-      if use_crashlytics
+    def install_crashlytics()
+
+      if @config.use_crashlytics
         if pod_installed?
           append_podfile
-          run_pod_install
 
           puts "Crashlytics setup..."
 
@@ -125,14 +127,8 @@ module Liftoff
 
     def append_podfile
       File.open('Podfile', 'a') do |file|
-        file.write("\n# Add support for crashlytics\n")
-        file.write("pod 'CrashlyticsFramework'\n")
+        file.write("\npod 'CrashlyticsFramework'\n")
       end
-    end
-
-    def run_pod_install
-      puts 'Running pod install'
-      system('pod install')
     end
 
     def xcode_helper

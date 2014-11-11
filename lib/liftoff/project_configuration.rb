@@ -11,6 +11,7 @@ module Liftoff
       :enable_static_analyzer,
       :indentation_level,
       :warnings,
+      :other_warnings,
       :templates,
       :project_template,
       :app_target_templates,
@@ -92,7 +93,7 @@ module Liftoff
     private
 
     def normalized_company_name
-      company.gsub(/[^0-9a-z]/i, '').downcase
+      company.force_encoding('utf-8').gsub(/[^0-9a-z]/i, '').downcase
     end
 
     def normalized_project_name
