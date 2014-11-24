@@ -3,14 +3,33 @@ source 'https://bitbucket.org/inthepocket/itp-cocoapods-specs'
 
 platform :ios, '<%= deployment_target %>'
 
+# App Dependencies
+
+pod 'ITPConfiguration'
+pod 'AFNetworking'
+
+# Unit Tests Dependencies
+
+target :unit_tests, :exclusive => true do
+  link_with '<%= test_target_name %>'
+  pod 'Specta'
+  pod 'Expecta'
+  pod 'OCMock'
+  pod 'OHHTTPStubs'
+end
+
+<% if enable_settings && use_cocoapods %>
 # Copy acknowledgements to the Settings.bundle
 
 post_install do | installer |
   require 'fileutils'
-  FileUtils.cp_r('Pods/Target Support Files/Pods/Pods-Acknowledgements.plist', '<%= project_name %>/Resources/Other-Sources/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
+
+  pods_acknowledgements_path = 'Pods/Target Support Files/Pods/Pods-Acknowledgements.plist'
+  settings_bundle_path = Dir.glob("**/*Settings.bundle*").first
+
+  if File.file?(pods_acknowledgements_path)
+    puts 'Copying acknowledgements to Settings.bundle'
+    FileUtils.cp_r(pods_acknowledgements_path, "#{settings_bundle_path}/Acknowledgements.plist", :remove_destination => true)
+  end
 end
-
-# Dependencies
-
-pod 'ITPConfiguration'
-pod 'AFNetworking'
+<% end %>

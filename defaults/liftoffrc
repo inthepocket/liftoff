@@ -7,6 +7,7 @@ company: In The Pocket
 # company_identifier:
 ############################################################################
 
+test_target_name: UnitTests
 configure_git: true
 warnings_as_errors: true
 enable_static_analyzer: true
@@ -14,6 +15,7 @@ indentation_level: 4
 use_tabs: false
 use_cocoapods: true
 use_crashlytics: true
+enable_settings: true
 strict_prompts: false
 
 run_script_phases:
@@ -92,7 +94,6 @@ app_target_templates:
           - Info.plist
           - <%= project_name %>-Prefix.pch
           - main.m
-          - Settings.bundle
       - Configuration:
         - Environments:
           - production.plist
@@ -121,15 +122,15 @@ app_target_templates:
 
 test_target_templates:
   objc:
-    - UnitTests:
+    - <%= test_target_name %>:
       - Resources:
-        - UnitTests-Info.plist
-        - UnitTests-Prefix.pch
+        - <%= test_target_name %>-Info.plist
+        - <%= test_target_name %>-Prefix.pch
       - Helpers:
       - Tests:
   swift:
-    - UnitTests:
+    - <%= test_target_name %>:
       - Resources:
-        - UnitTests-Info.plist
+        - <%= test_target_name %>-Info.plist
       - Helpers:
       - Tests:

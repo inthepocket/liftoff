@@ -1,6 +1,5 @@
 module Liftoff
   class TemplateGenerator
-
     def initialize(config)
       @config = config
     end

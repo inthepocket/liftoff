@@ -12,7 +12,7 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>3.1.0 (3.1.0)</string>
+			<string>1.0.0 (1.0.0.1)</string>
 			<key>Key</key>
 			<string>version_preference</string>
 			<key>Title</key>
@@ -22,7 +22,7 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>De Persgroep</string>
+			<string>In the Pocket</string>
 			<key>Key</key>
 			<string>developer_preference</string>
 			<key>Title</key>
@@ -30,6 +30,7 @@
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 		</dict>
+<% if use_cocoapods %>
 		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
@@ -42,6 +43,7 @@
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
+<% end %>
 	</array>
 	<key>StringsTable</key>
 	<string>Root</string>

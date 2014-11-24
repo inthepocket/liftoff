@@ -13,10 +13,11 @@ module Liftoff
 
         file_manager.create_project_dir(@config.project_name) do
           generate_project
-          generate_podfile
+          setup_cocoapods
           generate_templates
           install_crashlytics
-          install_pods
+          generate_settings
+          install_cocoapods
           perform_project_actions
           open_project
         end
@@ -48,28 +49,32 @@ module Liftoff
       generate_git
     end
 
-    def generate_podfile
-      CocoapodsSetup.new(@config).generate_podfile
+    def setup_cocoapods
+      cocoapods_setup.setup_cocoapods
     end
 
-    def install_pods
-      CocoapodsSetup.new(@config).install_pods
-    end
-
-    def install_crashlytics
-        CrashlyticsSetup.new(@config).install_crashlytics
+    def install_cocoapods
+      cocoapods_setup.install_cocoapods
     end
 
     def generate_templates
       TemplateGenerator.new(@config).generate_templates(file_manager)
     end
 
+    def install_crashlytics
+        CrashlyticsSetup.new(@config).install_crashlytics
+    end
+
     def generate_project
       ProjectBuilder.new(@config).create_project
     end
 
+    def generate_settings
+      SettingsGenerator.new(@config).generate
+    end
+
     def generate_git
-      GitSetup.new(@config.configure_git).setup
+      GitSetup.new(@config).setup
     end
 
     def set_indentation_level
@@ -120,6 +125,10 @@ module Liftoff
 
     def file_manager
       @file_manager ||= FileManager.new
+    end
+
+    def cocoapods_setup
+      @cocoapods_setup ||= CocoapodsSetup.new(@config)
     end
   end
 end

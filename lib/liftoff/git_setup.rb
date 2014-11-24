@@ -1,11 +1,11 @@
 module Liftoff
   class GitSetup
-    def initialize(generate_git)
-      @generate_git = generate_git
+    def initialize(config)
+      @config = config
     end
 
     def setup
-      if @generate_git
+      if @config.configure_git
         generate_files
 
         if needs_git_init?
@@ -18,8 +18,8 @@ module Liftoff
     private
 
     def generate_files
-      file_manager.generate('gitignore', '.gitignore')
-      file_manager.generate('gitattributes', '.gitattributes')
+      file_manager.generate('gitignore', '.gitignore', @config)
+      file_manager.generate('gitattributes', '.gitattributes', @config)
     end
 
     def initialize_repo
