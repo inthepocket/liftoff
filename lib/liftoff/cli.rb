@@ -46,6 +46,10 @@ module Liftoff
           @options[:use_crashlytics] = use_crashlytics
         end
 
+        opts.on('--[no-]parse', 'Enable Parse') do |enable_parse|
+          @options[:enable_parse] = enable_parse
+        end
+
         opts.on('--no-open', "Don't open Xcode after generation") do
           @options[:xcode_command] = false
         end

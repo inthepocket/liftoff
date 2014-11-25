@@ -24,7 +24,8 @@ module Liftoff
       :strict_prompts,
       :xcode_command,
       :extra_config,
-      :abs_project_identifier
+      :abs_project_identifier,
+      :enable_parse
 
     attr_writer :author,
       :company_identifier,

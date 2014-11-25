@@ -105,7 +105,7 @@ module Liftoff
     end
 
     def update_template use_crashlytics, organization = nil
-      file_list = file_list = Dir.glob("**/*AppDelegate.*")
+      file_list = Dir.glob("**/*AppDelegate.*")
       if use_crashlytics
         if file_list.first[/\.h|\.m/]
           file_manager.replace_in_files(file_list, "(((CRASHLYTICS_HEADER)))", "#import <Crashlytics/Crashlytics.h>")

@@ -7,6 +7,7 @@ platform :ios, '<%= deployment_target %>'
 
 pod 'ITPConfiguration'
 pod 'AFNetworking'
+<% if enable_parse %>pod 'Parse', '~> 1.5'<% end %>
 
 # Unit Tests Dependencies
 
