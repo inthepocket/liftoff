@@ -25,7 +25,8 @@ module Liftoff
       :xcode_command,
       :extra_config,
       :abs_project_identifier,
-      :enable_parse
+      :enable_parse,
+      :enable_googleanalytics
 
     attr_writer :author,
       :company_identifier,

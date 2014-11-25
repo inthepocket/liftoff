@@ -9,6 +9,8 @@
 #import "<%= prefix %>AppDelegate.h"
 
 <% if enable_parse %>#import <Parse/Parse.h><% end %>
+
+<% if enable_googleanalytics %>#import <GoogleAnalytics-iOS-SDK/GAI.h><% end %>
 (((CRASHLYTICS_HEADER)))
 
 @implementation <%= prefix %>AppDelegate
@@ -16,12 +18,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     (((CRASHLYTICS_APIKEY)))
 <% if enable_parse %>    [self registerForPushNotifications:application];<% end %>
+<% if enable_googleanalytics %>    [self registerGoogleAnalytics];<% end %>
 
     return YES;
 }
 <% if enable_parse %>
-#pragma mark -
-#pragma mark Push Notifications
+#pragma mark - Push Notifications
 
 - (void)registerForPushNotifications:(UIApplication *)application
 {
@@ -57,5 +59,19 @@
 {
     [PFPush handlePush:userInfo];
 }<% end %>
+<% if enable_googleanalytics %>
+#pragma mark - Google Analytics
 
+- (void)registerGoogleAnalytics
+{
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+
+#if DEBUG
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+#endif
+    // Initialize tracker. Replace with your tracking ID.
+    [[GAI sharedInstance] trackerWithTrackingId:<#UA-XXXX-Y#>];
+}
+<% end %>
 @end

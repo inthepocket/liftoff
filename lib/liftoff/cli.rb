@@ -50,6 +50,10 @@ module Liftoff
           @options[:enable_parse] = enable_parse
         end
 
+        opts.on('--[no-]googleanalytics', 'Enable GoogleAnalytics') do |enable_googleanalytics|
+          @options[:enable_googleanalytics] = enable_googleanalytics
+        end
+
         opts.on('--no-open', "Don't open Xcode after generation") do
           @options[:xcode_command] = false
         end

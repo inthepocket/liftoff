@@ -8,7 +8,7 @@ platform :ios, '<%= deployment_target %>'
 pod 'ITPConfiguration'
 pod 'AFNetworking'
 <% if enable_parse %>pod 'Parse', '~> 1.5'<% end %>
-
+<% if enable_googleanalytics %>pod 'GoogleAnalytics-iOS-SDK'<% end %>
 # Unit Tests Dependencies
 
 target :unit_tests, :exclusive => true do

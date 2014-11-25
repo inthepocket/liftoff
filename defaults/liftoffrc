@@ -18,6 +18,7 @@ use_crashlytics: true
 enable_settings: true
 strict_prompts: false
 enable_parse: true
+enable_googleanalytics: true
 
 run_script_phases:
   - todo.sh: Warn for TODO and FIXME comments
