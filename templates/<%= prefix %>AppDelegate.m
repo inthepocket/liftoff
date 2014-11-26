@@ -34,16 +34,21 @@
     return YES;
 }
 <% if enable_parse %>
-#pragma mark - Push Notifications
+#pragma mark - Parse
 
 - (void)configureParse:(UIApplication *)application
 {
     DDLogInfo(@"Configuring Parse framework");
 
-    // Parse (push notifications)
-
     [Parse setApplicationId:<#applicationId#> clientKey:<#clientKey#>];
 
+    [self registerForPushNotifications:application];
+}
+
+#pragma mark - Push Notifications
+
+- (void)registerForPushNotifications:(UIApplication *)application
+{
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
       UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
       UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
