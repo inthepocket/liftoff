@@ -26,7 +26,8 @@ module Liftoff
       :extra_config,
       :abs_project_identifier,
       :enable_parse,
-      :enable_googleanalytics
+      :enable_googleanalytics,
+      :deployment_target
 
     attr_writer :author,
       :company_identifier,
@@ -67,7 +68,7 @@ module Liftoff
     end
 
     def deployment_target
-      LATEST_IOS
+      @deployment_target || LATEST_IOS
     end
 
     def each_template(&block)

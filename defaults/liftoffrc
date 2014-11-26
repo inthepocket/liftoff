@@ -19,6 +19,7 @@ enable_settings: true
 strict_prompts: false
 enable_parse: true
 enable_googleanalytics: true
+deployment_target: 7.0
 
 run_script_phases:
   - todo.sh: Warn for TODO and FIXME comments
