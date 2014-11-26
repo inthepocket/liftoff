@@ -8,11 +8,16 @@
 
 #import "UIApplication+<%= prefix %>Appearance.h"
 
+#import "UINavigationBar+<%= prefix %>Appearance.h"
+
 @implementation UIApplication (<%= prefix %>Appearance)
 
 - (void)customizeAppearance
 {
-  // TODO: Add customization logic here
+    [UINavigationBar customizeAppearance];
+
+    // TODO: Add more customization logic here,
+    // split it up in appearance categories on the UI class
 }
 
 @end
