@@ -8,25 +8,35 @@
 
 #import "<%= prefix %>AppDelegate.h"
 
-<% if enable_parse %>#import <Parse/Parse.h><% end %>
 
+#import <CocoaLumberjack/CocoaLumberjack.h>
+<% if enable_parse %>#import <Parse/Parse.h><% end %>
 <% if enable_googleanalytics %>#import <GoogleAnalytics-iOS-SDK/GAI.h><% end %>
 (((CRASHLYTICS_HEADER)))
+
+#if DEBUG
+    static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#else
+    static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
 
 @implementation <%= prefix %>AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     (((CRASHLYTICS_APIKEY)))
-<% if enable_parse %>    [self registerForPushNotifications:application];<% end %>
-<% if enable_googleanalytics %>    [self registerGoogleAnalytics];<% end %>
+    [self configureLogging];
+<% if enable_parse %>    [self configureParse:application];<% end %>
+<% if enable_googleanalytics %>    [self configureGoogleAnalytics];<% end %>
 
     return YES;
 }
 <% if enable_parse %>
 #pragma mark - Push Notifications
 
-- (void)registerForPushNotifications:(UIApplication *)application
+- (void)configureParse:(UIApplication *)application
 {
+    DDLogInfo(@"Configuring Parse framework");
+
   // Parse (push notifications)
 
   [Parse setApplicationId:<#applicationId#> clientKey:<#clientKey#>];
@@ -62,8 +72,10 @@
 <% if enable_googleanalytics %>
 #pragma mark - Google Analytics
 
-- (void)registerGoogleAnalytics
+- (void)configureGoogleAnalytics
 {
+    DDLogInfo(@"Configuring Google Analytics framework");
+
     // Optional: automatically send uncaught exceptions to Google Analytics.
     [GAI sharedInstance].trackUncaughtExceptions = YES;
 
@@ -74,4 +86,14 @@
     [[GAI sharedInstance] trackerWithTrackingId:<#UA-XXXX-Y#>];
 }
 <% end %>
+#pragma mark - Logging
+
+- (void)configureLogging
+{
+    DDLogInfo(@"Configuring CocoaLumberjack framework");
+
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+}
+
 @end
