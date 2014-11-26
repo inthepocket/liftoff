@@ -56,7 +56,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSLog(@"Did register for remote notifications with deviceToken %@", deviceToken);
+    DDLogDebug(@"Did register for remote notifications with deviceToken %@", deviceToken);
 
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
@@ -65,7 +65,7 @@
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    NSLog(@"Did fail to register for remote notifications with error %@", error);
+    DDLogError(@"Did fail to register for remote notifications with error %@", error);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
