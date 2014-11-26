@@ -74,6 +74,15 @@ app_target_templates:
       - <%= prefix %>AppDelegate.m
       - UI:
         - Appearance:
+          - <%= prefix %>Appearance.h
+          - UIApplication+<%= prefix %>Appearance.h
+          - UIApplication+<%= prefix %>Appearance.m
+          - UINavigationBar+<%= prefix %>Appearance.h
+          - UINavigationBar+<%= prefix %>Appearance.m
+          - UIFont+<%= prefix %>Appearance.h
+          - UIFont+<%= prefix %>Appearance.m
+          - UIColor+<%= prefix %>Appearance.h
+          - UIColor+<%= prefix %>Appearance.m
         - Views:
         - ViewControllers:
       - Services:

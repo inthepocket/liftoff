@@ -8,6 +8,7 @@
 
 #import "<%= prefix %>AppDelegate.h"
 
+#import "<%= prefix %>Appearance.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
 <% if enable_parse %>#import <Parse/Parse.h><% end %>
@@ -23,6 +24,8 @@
 @implementation <%= prefix %>AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [[UIApplication sharedApplication] customizeAppearance];
+
     (((CRASHLYTICS_APIKEY)))
     [self configureLogging];
 <% if enable_parse %>    [self configureParse:application];<% end %>
@@ -37,18 +40,18 @@
 {
     DDLogInfo(@"Configuring Parse framework");
 
-  // Parse (push notifications)
+    // Parse (push notifications)
 
-  [Parse setApplicationId:<#applicationId#> clientKey:<#clientKey#>];
+    [Parse setApplicationId:<#applicationId#> clientKey:<#clientKey#>];
 
-  if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-    [application registerUserNotificationSettings:settings];
-    [application registerForRemoteNotifications];
-  } else {
-    [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
-  }
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+      UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+      UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+      [application registerUserNotificationSettings:settings];
+      [application registerForRemoteNotifications];
+    } else {
+      [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
+    }
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
