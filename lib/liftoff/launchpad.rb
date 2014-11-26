@@ -3,6 +3,7 @@ module Liftoff
     EX_NOINPUT = 66
 
     def liftoff(options)
+      puts 'Houston we have a liftoff! 🚀'
       liftoffrc = ConfigurationParser.new(options).project_configuration
       @config = ProjectConfiguration.new(liftoffrc)
       if project_exists?
