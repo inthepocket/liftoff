@@ -122,7 +122,7 @@ module Liftoff
     end
 
     def pod_installed?
-      system('which pod')
+      system('which pod > /dev/null')
     end
 
     def append_podfile
