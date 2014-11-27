@@ -23,12 +23,15 @@ deployment_target: 7.0
 
 run_script_phases:
   - todo.sh: Warn for TODO and FIXME comments
+  - icons_pre.sh: Overlay icons with build information
+  - icons_post.sh: Clean icons & reset to default
 
 templates:
   - travis.yml: .travis.yml
   - Gemfile.rb: Gemfile
   - test.sh: bin/test
   - setup.sh: bin/setup
+    icons.sh: bin/icons
   - README.md: README.md
   - build.gradle: build.gradle
   - gradle.properties: gradle.properties
