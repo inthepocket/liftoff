@@ -26,7 +26,7 @@ module Liftoff
 
           organization = pick_organization(organizations)
           integrate organization
-          puts "Crashlytics integration success! 👍"
+          puts "Crashlytics integration success!"
         else
           puts 'Please install CocoaPods or disable pods from liftoff ☝️'
         end
@@ -35,7 +35,7 @@ module Liftoff
       end
 
     rescue => e
-      puts "Crashlytics setup failed! 👎\nMessage: #{e}"
+      puts "Crashlytics setup failed! \nMessage: #{e}"
       update_template false
     end
 

@@ -3,7 +3,6 @@ module Liftoff
     EX_NOINPUT = 66
 
     def liftoff(options)
-      puts 'Houston we have a liftoff! 🚀'
       liftoffrc = ConfigurationParser.new(options).project_configuration
       @config = ProjectConfiguration.new(liftoffrc)
       if project_exists?
@@ -108,6 +107,7 @@ module Liftoff
 
     def open_project
       if @config.xcode_command
+        puts 'Houston we have a liftoff! 🚀'
         `#{@config.xcode_command}`
       end
     end

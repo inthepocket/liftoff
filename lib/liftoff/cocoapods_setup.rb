@@ -33,7 +33,7 @@ module Liftoff
     end
 
     def run_pod_install
-      puts 'Running pod install, you can run to the toilet now 🚽'
+      puts 'Running pod install'
       system('pod install')
     end
   end
