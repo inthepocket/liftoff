@@ -18,24 +18,22 @@ module Liftoff
         if pod_installed?
           append_podfile
 
-          puts "Crashlytics setup..."
-
           @crashlytics_key = init_crashlytics
           get_credentials
           organizations = get_organizations
 
           organization = pick_organization(organizations)
           integrate organization
-          puts "Crashlytics integration success!"
+          puts "Crashlytics integration success!".colorize(:green)
         else
-          puts 'Please install CocoaPods or disable pods from liftoff ☝️'
+          puts 'Please install CocoaPods or disable pods from liftoff'.colorize(:orange)
         end
       else
         update_template false
       end
 
     rescue => e
-      puts "Crashlytics setup failed! \nMessage: #{e}"
+      puts "Crashlytics setup failed! \nMessage: #{e}".colorize(:red)
       update_template false
     end
 

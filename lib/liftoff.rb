@@ -5,6 +5,7 @@ require 'erb'
 require 'etc'
 require 'httparty'
 require 'find'
+require 'colorize'
 
 require 'highline/import'
 require 'xcodeproj'

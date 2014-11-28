@@ -116,7 +116,6 @@ app_target_templates:
           - develop.plist
         - <%= prefix %>Configuration.h
         - <%= prefix %>Configuration.m
-      - Signing:
   swift:
     - <%= project_name %>:
       - Extensions:

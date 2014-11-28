@@ -3,6 +3,8 @@ module Liftoff
     EX_NOINPUT = 66
 
     def liftoff(options)
+      puts "Initiating launch sequence...\n".colorize(:green)
+
       liftoffrc = ConfigurationParser.new(options).project_configuration
       @config = ProjectConfiguration.new(liftoffrc)
       if project_exists?
@@ -38,6 +40,7 @@ module Liftoff
     end
 
     def perform_project_actions
+      puts "Performing project actions...".colorize(:blue)
       set_indentation_level
       enable_warnings
       enable_other_warnings
@@ -50,30 +53,37 @@ module Liftoff
     end
 
     def setup_cocoapods
+      puts "Setting up CocoaPods...".colorize(:blue)
       cocoapods_setup.setup_cocoapods
     end
 
     def install_cocoapods
+      puts "Installing CocoaPods dependencies...".colorize(:blue)
       cocoapods_setup.install_cocoapods
     end
 
     def generate_templates
+      puts "Generating templates...".colorize(:blue)
       TemplateGenerator.new(@config).generate_templates(file_manager)
     end
 
     def install_crashlytics
+      puts "Installing Crashlytics...".colorize(:blue)
         CrashlyticsSetup.new(@config).install_crashlytics
     end
 
     def generate_project
+      puts "Generating project...".colorize(:blue)
       ProjectBuilder.new(@config).create_project
     end
 
     def generate_settings
+      puts "Generating Settings.bundle...".colorize(:blue)
       SettingsGenerator.new(@config).generate
     end
 
     def generate_git
+      puts "Generating Git...".colorize(:blue)
       GitSetup.new(@config).setup
     end
 
@@ -107,7 +117,7 @@ module Liftoff
 
     def open_project
       if @config.xcode_command
-        puts 'Houston we have a liftoff! 🚀'
+        puts "\nHouston we have a liftoff! 🚀".colorize(:green)
         `#{@config.xcode_command}`
       end
     end
