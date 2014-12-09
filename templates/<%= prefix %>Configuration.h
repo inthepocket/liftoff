@@ -10,6 +10,11 @@
 
 @interface <%= prefix %>Configuration : ITPConfiguration
 
+/**
+* The base URL of the API
+*
+* @return A string representing the base URL of the API
+*/
 @property (nonatomic, copy, readonly) NSString *baseURL; // TODO: Change this to reflect your own configuration values (see the <environment>.plist files)
 
 @end
