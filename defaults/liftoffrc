@@ -133,6 +133,7 @@ app_target_templates:
           - LaunchScreen.xib
         - Other-Sources:
           - Info.plist
+          - <%= project_name %>-Bridging-Header.h
 
 test_target_templates:
   objc:

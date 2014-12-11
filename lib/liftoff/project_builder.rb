@@ -79,6 +79,8 @@ module Liftoff
           configuration.build_settings['INFOPLIST_FILE'] = file_path
         elsif name.end_with?('pch')
           configuration.build_settings['GCC_PREFIX_HEADER'] = file_path
+        elsif name.end_with?('-Bridging-Header.h')
+          configuration.build_settings['SWIFT_OBJC_BRIDGING_HEADER'] = file_path
         end
       end
     end
