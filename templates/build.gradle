@@ -11,7 +11,7 @@
 		}
 		dependencies {
 			classpath 'mobi.inthepocket.org.openbakery:xcodePlugin:0.9.+'
-			classpath 'mobi.inthepocket.abs:absplugin:0.9.+'
+			classpath 'mobi.inthepocket.abs:absplugin:1.0.+'
 		}
 	}
 
