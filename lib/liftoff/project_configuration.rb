@@ -1,7 +1,5 @@
 module Liftoff
   class ProjectConfiguration
-    LATEST_IOS = 8.0
-
     attr_accessor :project_name,
       :project_path,
       :company,
@@ -67,10 +65,6 @@ module Liftoff
       end
     end
 
-    def deployment_target
-      @deployment_target || LATEST_IOS
-    end
-
     def each_template(&block)
       return enum_for(__method__) unless block_given?
 
@@ -98,11 +92,7 @@ module Liftoff
     private
 
     def normalized_company_name
-      company.force_encoding('utf-8').gsub(/[^0-9a-z]/i, '').downcase
-    end
-
-    def normalized_project_name
-      project_name.gsub(/[^0-9a-z]/i, '').downcase
+      company.force_encoding('UTF-8').gsub(/[^0-9a-z]/i, '').downcase
     end
   end
 end
