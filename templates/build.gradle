@@ -1,111 +1,126 @@
-	buildscript {
-		repositories {
-	        maven {
-	            credentials {
-	                username itpMavenUser
-	                password itpMavenPassword
-	            }
-	            url('http://maven2.itpservices.be/releases')
-	        }
-			mavenCentral()
-		}
-		dependencies {
-			classpath 'mobi.inthepocket.org.openbakery:xcodePlugin:0.9.+'
-			classpath 'mobi.inthepocket.abs:absplugin:1.0.+'
+buildscript {
+	repositories {
+		maven {
+			url 'https://artifactory.itpservices.be/artifactory/plugins-release'
+			credentials {
+				username = '${artifactory_user}'
+				password = '${artifactory_password}'
+			}
 		}
 	}
-
-	apply plugin: 'xcode'
-	apply plugin: 'abs'
-
-	def package_name = "<%= company_identifier %>.<%= project_name %>";
-	def short_version = "1.0.0";
-	def build_number = 1;
-	def environment = "production" // "develop", "stagin", "production"
-	def build_type = "inhouse" // "inhouse", "adhoc-dev", "adhoc-prod", "appstore"
-	def project_id = <%= abs_project_identifier %>
-
-	if (hasProperty('projectVersion')) {
-	    short_version = projectVersion;
+	dependencies {
+		classpath 'org.openbakery:xcodePlugin:0.9.+'
+		classpath 'mobi.inthepocket.abs:absplugin:1.0.+'
 	}
+}
 
-	def env = System.getenv();
-	if (env.get("BUILD_NUMBER") != null) {
-	    build_number = Integer.parseInt(env.get("BUILD_NUMBER"));
+apply plugin: 'xcode'
+apply plugin: 'abs'
+
+// Define default values
+
+def package_name = '<%= company_identifier %>.<%= project_name %>'
+def short_version = '1.0.0'
+def build_number = 1
+def environment = 'development' // e.g. 'development', 'staging', 'production'
+def build_type = 'inhouse' // e.g. 'inhouse', 'appstore', 'adhoc', 'dev'
+def abs_project_id = <%= abs_project_identifier %>
+
+// Xcode configuration values
+
+def xcode_workspace = '<%= project_name %>.xcworkspace'
+def xcode_scheme = '<%= project_name %>'
+def xcode_infoPlist = '<%= project_name %>/Resources/Other-Sources/Info.plist'
+def xcode_configuration = 'Release'
+
+// Default signing identity
+
+def xcode_identity = 'iPhone Distribution: ITP Agency bvba(ENT)'
+def xcode_certificateFile = new File('Signing/itpenterprise.p12').toURI()
+def xcode_certificatePassword = 'itpenterprise'
+def xcode_mobileProvisionFile = new File('Signing/In_the_Pocket_apps.mobileprovision').toURI()
+
+// Version defined in gradle.properties overridse the default version
+
+if (hasProperty('projectVersion')) {
+	short_version = projectVersion
+}
+
+// Parse environment variables (set by Jenkins)
+
+def env = System.getenv()
+
+if (env.get('BUILD_NUMBER') != null) {
+	build_number = Integer.parseInt(env.get('BUILD_NUMBER'))
+}
+
+if (env.get('ENVIRONMENT') != null) {
+	environment = env.get('ENVIRONMENT')
+}
+
+if (env.get('BUILD_TYPE') != null) {
+	build_type = env.get('BUILD_TYPE')
+}
+
+// Configure App Store specific
+
+if (build_type == 'appstore') {
+	package_name = ''
+	xcode_identity = ''
+	xcode_certificateFile = new File('Signing/xxx.p12').toURI()
+	xcode_certificatePassword = ''
+	xcode_mobileProvisionFile = new File('Signing/xxx.mobileprovision').toURI()
+}
+
+// Configure Ad Hoc specific
+
+else if (build_type == 'adhoc') {
+	package_name = ''
+	xcode_identity = ''
+	xcode_certificateFile = new File('Signing/xxx.p12').toURI()
+	xcode_certificatePassword = ''
+	xcode_mobileProvisionFile = new File('Signing/xxx.mobileprovision').toURI()
+}
+
+// Derived properties
+
+def build_flavour = environment
+def long_version = short_version + '.' + build_number
+
+System.out.println('Building with type "' + build_type + ' and flavour ' + build_flavour + '".')
+System.out.println('Building with bundle identifier "' + package_name + '".')
+
+
+
+xcodebuild {
+	sdk = 'iphoneos'
+	scheme = xcode_scheme
+	workspace = xcode_workspace
+	infoPlist = xcode_infoPlist
+	configuration = xcode_configuration
+
+	signing {
+		identity = xcode_identity
+		certificateURI = xcode_certificateFile
+		certificatePassword = xcode_certificatePassword
+		mobileProvisionURI = xcode_mobileProvisionFile
 	}
+}
 
-	def long_version = short_version + "." + build_number;
+infoplist {
+	bundleIdentifier = package_name
+	shortVersionString = short_version
+	version = long_version
+	commands = [
+		'Set :ITPFlavour ' + build_flavour
+	]
+}
 
-	if (env.get("ENVIRONMENT") != null) {
-	  environment = env.get("ENVIRONMENT");
-	}
-
-	if (env.get("BUILD_TYPE") != null) {
-	    build_type = env.get("BUILD_TYPE");
-	}
-
-	def config = 'Release'
-	def xcode_identity = "iPhone Distribution: ITP Agency bvba(ENT)";
-	def xcode_certificateFile = file("Signing/itpenterprise.p12");
-	def xcode_certificatePassword = "itpenterprise";
-	def xcode_mobileProvisionFile = file("Signing/In_the_Pocket_apps.mobileprovision");
-
-	if (build_type == "appstore") {
-	    // Override environment
-	    environment = "production";
-	    xcode_identity = ""
-	    xcode_certificateFile = file("")
-	    xcode_certificatePassword = ""
-	    xcode_mobileProvisionFile = file("")
-	} else if (build_type == "adhoc-prod") {
-			//xcode_identity = ""
-			//xcode_certificateFile = file("")
-			//xcode_certificatePassword = ""
-			//xcode_mobileProvisionFile = file("")
-	} else if (build_type == "adhoc-dev") {
-	    //xcode_identity = 'iPhone Developer: Lode Vanhove (86PRJHBJBE)'
-	    //xcode_certificateFile = file('Signing/develop.p12')
-	    //xcode_certificatePassword = 'pre29!Teresa'
-	    //xcode_mobileProvisionFile = file('Signing/DeMorgenbe_Mobile_Development.mobileprovision')
-
-	} else {
-	    // Build type is 'inhouse', change package name
-	    package_name += "." + environment;
-	}
-
-	def build_flavour = environment
-
-	System.out.println("Building \"" + build_type + "/" + build_flavour + "\".");
-	System.out.println("Building with bundle identifier \"" + package_name + "\".");
-
-	xcodebuild {
-		sdk = 'iphoneos'
-		scheme = '<%= project_name %>'
-		workspace = '<%= project_name %>.xcworkspace'
-		configuration = config
-
-		signing {
-			identity = xcode_identity
-			certificateFile = xcode_certificateFile
-			certificatePassword = xcode_certificatePassword
-			mobileProvisionFile = xcode_mobileProvisionFile
-		}
-
-		infoPlist = '<%= project_name %>/Resources/Other-Sources/Info.plist'
-	}
-
-	infoplist {
-		bundleIdentifier = package_name
-		shortVersionString = short_version
-		version = long_version
-	  flavour = build_flavour
-	}
-
-	abs {
-		projectId = project_id
-	    versionNumber = short_version
-	    buildNumber = build_number
-	    bundleId = package_name
-	    flavour = build_flavour
-	    type = build_type
-	}
+abs {
+	projectId = abs_project_id
+	versionNumber = short_version
+	buildNumber = build_number
+	bundleId = package_name
+	flavour = build_flavour
+	type = build_type
+}
