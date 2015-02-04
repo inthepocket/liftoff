@@ -118,12 +118,12 @@ app_target_templates:
         - <%= prefix %>Configuration.m
   swift:
     - <%= project_name %>:
+      - AppDelegate.swift
       - Extensions:
       - Protocols:
       - Models:
       - ViewModels:
       - Controllers:
-        - AppDelegate.swift
       - Views:
       - Resources:
         - Images.xcassets
