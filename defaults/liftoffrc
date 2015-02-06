@@ -120,6 +120,7 @@ app_target_templates:
     - <%= project_name %>:
       - AppDelegate.swift
       - Extensions:
+        - UIColorExtensions.swift
       - Protocols:
       - Models:
       - ViewModels:
