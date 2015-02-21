@@ -4,7 +4,7 @@
 company: In The Pocket
 # author:
 # prefix:
-# company_identifier:
+company_identifier: mobi.inthepocket
 ############################################################################
 
 test_target_name: UnitTests
@@ -22,16 +22,14 @@ enable_googleanalytics: true
 deployment_target: 7.0
 
 run_script_phases:
-  - todo.sh: Warn for TODO and FIXME comments
-#  - icons_pre.sh: Overlay icons with build information
-#  - icons_post.sh: Clean icons & reset to default
+  - file: todo.sh
+    name: Warn for TODO and FIXME comments
 
 templates:
   - travis.yml: .travis.yml
   - Gemfile.rb: Gemfile
   - test.sh: bin/test
   - setup.sh: bin/setup
-    icons.sh: bin/icons
   - README.md: README.md
   - build.gradle: build.gradle
   - gradle.properties: gradle.properties

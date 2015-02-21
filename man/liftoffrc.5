@@ -228,6 +228,13 @@ this comes with 2 templates:
 .Ic swift
 and
 .Ic objc .
+.It Ic test_target_name
+type: string
+.br
+default:
+.Ic UnitTests
+.Pp
+Set the name of the unit test target.
 .It Ic project_name
 type: string
 .br
@@ -287,7 +294,7 @@ Set this key to
 .Ic false
 to disable the automatic-open functionality
 .It Ic extra_config
-type: array of dictionaries
+type: dictionary
 .br
 default: none
 .Pp
@@ -295,13 +302,33 @@ Add additional per-configuration settings to the main application target. By
 default this key isn't set. See
 .Sx EXTRA CONFIGURATION
 for more information on the format of this key.
+.It Ic extra_test_config
+type: dictionary
+.br
+default: none
+.Pp
+Add additional per-configuration settings to the test target. By default this
+key isn't set. See
+.Sx EXTRA CONFIGURATION
+for more information on the format of this key.
+.It Ic enable_settings
+type: boolean
+.br
+default:
+.Ic true
+.Pp
+Create a settings bundle. If you also have
+.Ic use_cocoapods
+enabled, this settings bundle will automatically contain the acknowledgements
+for any installed pods.
 .El
 .
 .Sh SCRIPT PHASES
 .Ic liftoff
 installs two Run Script Build Phases by default:
 .Bd -literal
-  - todo.sh: Warn for TODO and FIXME comments
+  - file: todo.sh
+    name: Warn for TODO and FIXME comments
 .Ed
 .Pp
 This script turns any
@@ -310,7 +337,8 @@ or
 .Ic FIXME
 comments into warnings at compilation time.
 .Bd -literal
-  - bundle_version.sh: Set version number
+  - file: bundle_version.sh
+    name: Set the version number
 .Ed
 .Pp
 This script sets the build number based on the number of
@@ -320,6 +348,21 @@ commits on
 and sets the marketing version based on the most recent
 .Ic git
 tag.
+.Pp
+You can also add an optional
+.Ic index
+key to the build phase. The value of this key (an
+.Ic integer )
+will be used to determine where to insert the build phase when adding it to the
+target. This list is zero-indexed. You can use
+.Ic -1
+to indicate that the script should be added to the end, which is the default
+behavior.
+.Bd -literal
+  - file: my_custon_script.sh
+    name: Run my custom script before anything else
+    index: 0
+.Ed
 .
 .Sh WARNINGS
 .Ic liftoff
@@ -547,13 +590,15 @@ in your
 .Sh EXTRA CONFIGURATION
 .Ic liftoff
 can perform additional arbitrary configuration to the main application target
-on a per-build configuration basis. In order to add arbitrary settings, you
-should add keys to the
+or the test target on a per-build configuration basis. In order to add
+arbitrary settings, you should add the
 .Ic extra_config
+or the
+.Ic extra_test_config
 key in your
-.Nm
-that correspond to the build configuration you'd like to modify. For example,
-to set all warnings on your
+.Nm ,
+and add dictionaries that correspond to the build configuration you'd like to
+modify. For example, to set all warnings on your
 .Ic Debug
 build configuration, you can set the following:
 .Pp
@@ -567,7 +612,7 @@ extra_config:
 Note that the key for the build configuration must match the name of the build
 configuration you'd like to modify exactly.
 .Pp
-If you would like to set a project-wide setting for the application target, you
+If you would like to add a setting for all available build configurations, you
 can use the special
 .Ic all
 key in the configuration:

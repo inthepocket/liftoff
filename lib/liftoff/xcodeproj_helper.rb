@@ -1,9 +1,11 @@
 module Liftoff
   class XcodeprojHelper
+    LAST_INDEX = -1
+
     def treat_warnings_as_errors(enable_errors)
       if enable_errors
         puts 'Setting GCC_TREAT_WARNINGS_AS_ERRORS for Release builds'
-        target.build_settings('Release')['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'YES'
+        application_target.build_settings('Release')['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'YES'
       end
     end
 
@@ -52,30 +54,34 @@ module Liftoff
     def add_script_phases(scripts)
       if scripts
         scripts.each do |script|
-          key, value = script.first
-          puts "Adding shell script build phase '#{value}'"
-          add_shell_script_build_phase(file_manager.template_contents(key), value)
+
+          file = script['file']
+          name = script['name']
+          index = script.fetch('index', LAST_INDEX)
+
+          puts "Adding shell script build phase '#{name}'"
+          add_shell_script_build_phase(file_manager.template_contents(file), name, index)
         end
       end
     end
 
     def add_script_phase(name, value)
       puts "Adding shell script build phase '#{name}'"
-      add_shell_script_build_phase(value, name)
+      add_shell_script_build_phase(value, name, LAST_INDEX)
     end
 
-    def perform_extra_config(extra_config)
-      if extra_config
-        extra_config.each do |name, settings|
-          if name.downcase == "all"
-            object = target
-          else
-            object = target.build_settings(name)
-          end
+    def perform_extra_config(app_config, test_config)
+      {app_config => application_target, test_config => test_target}.each do |config, target|
+        if config
+          config.each do |name, settings|
+            if name.downcase == "all"
+              object = target
+            else
+              object = target.build_settings(name)
+            end
 
-          if object
-            settings.each do |key, value|
-              object[key] = value
+            if object
+              object.merge!(settings)
             end
           end
         end
@@ -88,24 +94,40 @@ module Liftoff
 
     private
 
-    def target
-      @target ||= ObjectPicker.choose_item('target', available_targets)
+    def application_target
+      @target ||= ObjectPicker.choose_item('target', application_targets)
     end
 
-    def available_targets
-      xcode_project.targets.to_a.reject { |t| t.name.end_with?('Tests') }
+    def test_target
+      @test_target ||= ObjectPicker.choose_item('test target', test_targets)
     end
 
-    def add_shell_script_build_phase(script, name)
+    def application_targets
+      all_targets.reject { |t| t.name.end_with?('Tests') }
+    end
+
+    def test_targets
+      all_targets.select { |t| t.name.end_with?('Tests') }
+    end
+
+    def all_targets
+      xcode_project.targets.to_a
+    end
+
+    def add_shell_script_build_phase(script, name, index)
       if build_phase_does_not_exist_with_name?(name)
-        build_phase = target.new_shell_script_build_phase(name)
+        build_phase = application_target.new_shell_script_build_phase(name)
         build_phase.shell_script = script
+
+        application_target.build_phases.delete(build_phase)
+        application_target.build_phases.insert(index, build_phase)
+
         xcode_project.save
       end
     end
 
     def build_phase_does_not_exist_with_name?(name)
-      target.build_phases.to_a.none? { |phase| phase.display_name == name }
+      application_target.build_phases.to_a.none? { |phase| phase.display_name == name }
     end
 
     def file_manager
