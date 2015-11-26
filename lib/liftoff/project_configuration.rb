@@ -16,8 +16,8 @@ module Liftoff
       :project_template,
       :app_target_templates,
       :test_target_templates,
-      :use_cocoapods,
       :use_crashlytics,
+      :dependency_managers,
       :run_script_phases,
       :strict_prompts,
       :xcode_command,
@@ -26,7 +26,9 @@ module Liftoff
       :enable_parse,
       :enable_googleanalytics,
       :extra_test_config,
-      :deployment_target
+      :deployment_target,
+      :schemes,
+      :build_configurations
 
     attr_writer :author,
       :company_identifier,
@@ -93,6 +95,10 @@ module Liftoff
 
     def path
       @path || project_name
+    end
+
+    def dependency_manager_enabled?(name)
+      dependency_managers.include?(name)
     end
 
     private

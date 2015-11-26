@@ -6,6 +6,7 @@ module Liftoff
       @test_target_name = configuration.test_target_name
       set_company_name(configuration.company)
       set_prefix(configuration.prefix)
+      create_build_configurations(configuration.build_configurations)
       configure_base_project_settings
     end
 
@@ -26,12 +27,19 @@ module Liftoff
       xcode_project.new_group(name, path)
     end
 
-    def generate_scheme
+    def generate_default_scheme
+      generate_scheme(@name)
+    end
+
+    def generate_scheme(name)
       scheme = Xcodeproj::XCScheme.new
       scheme.add_build_target(app_target)
       scheme.add_test_target(unit_test_target)
       scheme.set_launch_target(app_target)
-      scheme.save_as(xcode_project.path, @name)
+      if block_given?
+        yield scheme
+      end
+      scheme.save_as(xcode_project.path, name)
     end
 
     private
@@ -50,6 +58,7 @@ module Liftoff
         configuration.build_settings.delete('OTHER_LDFLAGS')
         configuration.build_settings.delete('IPHONEOS_DEPLOYMENT_TARGET')
         configuration.build_settings.delete('SKIP_INSTALL')
+        configuration.build_settings.delete('INSTALL_PATH')
         configuration.build_settings['LD_RUNPATH_SEARCH_PATHS'] = ['$(inherited)', '@executable_path/Frameworks']
       end
       target
@@ -61,6 +70,11 @@ module Liftoff
 
     def set_company_name(company)
       xcode_project.root_object.attributes['ORGANIZATIONNAME'] = company
+    end
+
+    def create_build_configurations(build_configurations)
+      builder = BuildConfigurationBuilder.new(xcode_project)
+      builder.generate_build_configurations(build_configurations)
     end
 
     def new_test_target(name)

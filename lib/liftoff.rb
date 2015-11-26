@@ -10,9 +10,14 @@ require 'colorize'
 require 'highline/import'
 require 'xcodeproj'
 
+require 'liftoff/build_configuration_builder'
 require 'liftoff/cli'
-require 'liftoff/cocoapods_setup'
 require 'liftoff/crashlytics_setup'
+require "liftoff/dependency_manager_coordinator"
+require "liftoff/dependency_manager"
+require "liftoff/dependency_managers/carthage"
+require "liftoff/dependency_managers/cocoapods"
+require "liftoff/dependency_managers/null_dependency_manager"
 require 'liftoff/settings_generator'
 require 'liftoff/configuration_parser'
 require 'liftoff/deprecation_manager'
@@ -24,6 +29,7 @@ require 'liftoff/option_fetcher'
 require 'liftoff/project'
 require 'liftoff/project_builder'
 require 'liftoff/project_configuration'
+require 'liftoff/scheme_builder'
 require 'liftoff/string_renderer'
 require 'liftoff/template_finder'
 require 'liftoff/template_generator'

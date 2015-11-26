@@ -13,8 +13,8 @@ warnings_as_errors: true
 enable_static_analyzer: true
 indentation_level: 4
 use_tabs: false
-use_cocoapods: true
 use_crashlytics: true
+dependency_managers: cocoapods
 enable_settings: true
 strict_prompts: false
 enable_parse: true

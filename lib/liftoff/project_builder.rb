@@ -14,7 +14,7 @@ module Liftoff
       end
 
       xcode_project.save
-      xcode_project.generate_scheme
+      scheme_builder.create_schemes
     end
 
     private
@@ -90,7 +90,7 @@ module Liftoff
     end
 
     def resource_file?(name)
-      name.end_with?('xcassets', 'bundle')
+      name.end_with?('xcassets', 'bundle', 'xib', 'storyboard')
     end
 
     def template_file?(object)
@@ -119,6 +119,10 @@ module Liftoff
 
     def string_renderer
       @renderer ||= StringRenderer.new(@config)
+    end
+
+    def scheme_builder
+      @scheme_builder ||= SchemeBuilder.new(xcode_project, @config)
     end
   end
 end

@@ -15,11 +15,11 @@ module Liftoff
 
         file_manager.create_project_dir(@config.path) do
           generate_project
-          setup_cocoapods
+          setup_dependency_managers
           generate_templates
           install_crashlytics
           generate_settings
-          install_cocoapods
+          install_dependencies
           perform_project_actions
           open_project
         end
@@ -52,14 +52,12 @@ module Liftoff
       generate_git
     end
 
-    def setup_cocoapods
-      puts "Setting up CocoaPods...".colorize(:blue)
-      cocoapods_setup.setup_cocoapods
+    def setup_dependency_managers
+      dependency_manager_coordinator.setup_dependencies
     end
 
-    def install_cocoapods
-      puts "Installing CocoaPods dependencies...".colorize(:blue)
-      cocoapods_setup.install_cocoapods
+    def install_dependencies
+      dependency_manager_coordinator.install_dependencies
     end
 
     def generate_templates
@@ -96,7 +94,8 @@ module Liftoff
     end
 
     def add_script_phases
-      xcode_helper.add_script_phases(@config.run_script_phases)
+      phases = @config.run_script_phases + dependency_manager_coordinator.run_script_phases_for_dependencies
+      xcode_helper.add_script_phases(phases)
     end
 
     def enable_warnings
@@ -131,15 +130,36 @@ module Liftoff
     end
 
     def xcode_helper
-      @xcode_helper ||= XcodeprojHelper.new
+      @xcode_helper ||= XcodeprojHelper.new(@config)
     end
 
     def file_manager
       @file_manager ||= FileManager.new
     end
 
-    def cocoapods_setup
-      @cocoapods_setup ||= CocoapodsSetup.new(@config)
+    def dependency_manager_coordinator
+      @dependency_manager_coordinator ||=
+        DependencyManagerCoordinator.new(dependency_managers)
+    end
+
+    def dependency_managers
+      @dependency_managers ||= [cocoapods, carthage]
+    end
+
+    def cocoapods
+      if @config.dependency_manager_enabled?("cocoapods")
+        Cocoapods.new(@config)
+      else
+        NullDependencyManager.new(@config)
+      end
+    end
+
+    def carthage
+      if @config.dependency_manager_enabled?("carthage")
+        Carthage.new(@config)
+      else
+        NullDependencyManager.new(@config)
+      end
     end
   end
 end

@@ -2,6 +2,10 @@ module Liftoff
   class XcodeprojHelper
     LAST_INDEX = -1
 
+    def initialize(config)
+      @test_target_name = config.test_target_name
+    end
+
     def treat_warnings_as_errors(enable_errors)
       if enable_errors
         puts 'Setting GCC_TREAT_WARNINGS_AS_ERRORS for Release builds'
@@ -103,11 +107,11 @@ module Liftoff
     end
 
     def application_targets
-      all_targets.reject { |t| t.name.end_with?('Tests') }
+      all_targets.reject { |t| t.name == @test_target_name }
     end
 
     def test_targets
-      all_targets.select { |t| t.name.end_with?('Tests') }
+      all_targets.select { |t| t.name == @test_target_name }
     end
 
     def all_targets

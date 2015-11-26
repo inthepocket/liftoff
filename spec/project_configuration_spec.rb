@@ -128,6 +128,74 @@ describe Liftoff::ProjectConfiguration do
         expect(config.path).to eq 'Another Path'
       end
     end
+    
+    describe '#schemes' do
+      it 'returns an array of schemes' do
+        schemes = [
+          {
+            "name" => "<%= project_name %>-CI",
+            "actions" => {
+              "test" => {
+                "build_configuration" => "Debug"
+              },
+              "profile" => {
+                "build_configuration" => "Release"
+              },
+              "analyze" => {
+                "build_configuration" => "Debug"
+              },
+              "archive" => {
+                "build_configuration" => "Release"
+              },
+              "launch" => {
+                "build_configuration" => "Debug"
+              }
+            }
+          }
+        ]
+
+        config = Liftoff::ProjectConfiguration.new({})
+        config.schemes = schemes
+    
+        expect(config.schemes.to_a).to eq(schemes)
+      end
+    end
+  end
+
+  describe "#dependency_manager_enabled?" do
+    it "returns true when name is included in list" do
+      config = Liftoff::ProjectConfiguration.new({})
+      config.dependency_managers = ["cocoapods"]
+
+      expect(config.dependency_manager_enabled?("cocoapods")).to eq(true)
+    end
+
+    it "returns false when name is missing from list" do
+      config = Liftoff::ProjectConfiguration.new({})
+      config.dependency_managers = ["carthage"]
+
+      expect(config.dependency_manager_enabled?("cocoapods")).to eq(false)
+    end
+  end
+
+  describe "#build_configurations" do
+    it "returns an array of build configurations" do
+      build_configurations = [
+        {
+          "name" => "Debug-CI",
+          "type" => "debug",
+        },
+        {
+          "name" => "Release-CI",
+          "type" => "release",
+        },
+      ]
+
+      config = Liftoff::ProjectConfiguration.new({})
+      config.build_configurations = build_configurations
+
+      expect(config.build_configurations).to eq(build_configurations)
+    end
   end
 
   def build_config(name)

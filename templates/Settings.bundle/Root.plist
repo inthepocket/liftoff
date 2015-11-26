@@ -30,7 +30,7 @@
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 		</dict>
-<% if use_cocoapods %>
+<% if dependency_manager_enabled?("cocoapods") %>
 		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
