@@ -67,7 +67,7 @@ other_warnings:
 
 xcode_command: open -a 'Xcode' .
 
-project_template: objc
+project_template: swift
 
 app_target_templates:
   objc:
