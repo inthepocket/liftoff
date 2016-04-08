@@ -6,7 +6,6 @@ inhibit_all_warnings!
 
 # App Dependencies
 
-pod 'ITPConfiguration'
 pod 'CocoaLumberjack', '= 2.0.0-beta4'
 pod 'AFNetworking'
 <% if enable_googleanalytics %>pod 'GoogleAnalytics-iOS-SDK'<% end %>

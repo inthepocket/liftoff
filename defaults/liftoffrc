@@ -107,13 +107,6 @@ app_target_templates:
           - Info.plist
           - <%= project_name %>-Prefix.pch
           - main.m
-      - Configuration:
-        - Environments:
-          - production.plist
-          - staging.plist
-          - develop.plist
-        - <%= prefix %>Configuration.h
-        - <%= prefix %>Configuration.m
   swift:
     - <%= project_name %>:
       - AppDelegate.swift
