@@ -33,8 +33,6 @@ templates:
   - README.md: README.md
   - build.gradle: build.gradle
   - gradle.properties: gradle.properties
-  - In_the_Pocket_apps.mobileprovision: Signing/In_the_Pocket_apps.mobileprovision
-  - itpenterprise.p12: Signing/itpenterprise.p12
 
 warnings:
   - GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED
