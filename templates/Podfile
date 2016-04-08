@@ -10,7 +10,6 @@ pod 'ITPConfiguration'
 pod 'ITPCategories'
 pod 'CocoaLumberjack', '= 2.0.0-beta4'
 pod 'AFNetworking'
-<% if enable_parse %>pod 'Parse', '~> 1.5'<% end %>
 <% if enable_googleanalytics %>pod 'GoogleAnalytics-iOS-SDK'<% end %>
 # Unit Tests Dependencies
 

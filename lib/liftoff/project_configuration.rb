@@ -23,7 +23,7 @@ module Liftoff
       :xcode_command,
       :extra_config,
       :abs_project_identifier,
-      :enable_parse,
+      :enable_push,
       :enable_googleanalytics,
       :extra_test_config,
       :deployment_target,

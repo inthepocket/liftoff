@@ -11,7 +11,6 @@
 #import "<%= prefix %>Appearance.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
-<% if enable_parse %>#import <Parse/Parse.h><% end %>
 <% if enable_googleanalytics %>#import <GoogleAnalytics-iOS-SDK/GAI.h><% end %>
 (((CRASHLYTICS_HEADER)))
 
@@ -26,29 +25,22 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[UIApplication sharedApplication] customizeAppearance];
 
-    (((CRASHLYTICS_APIKEY)))
     [self configureLogging];
-<% if enable_parse %>    [self configureParse:application];<% end %>
+<% if enable_push %>    [self configurePushNotifications:application];<% end %>
 <% if enable_googleanalytics %>    [self configureGoogleAnalytics];<% end %>
 
     return YES;
 }
-<% if enable_parse %>
-#pragma mark - Parse
+<% if enable_push %>
+#pragma mark - Push Notifications
 
-- (void)configureParse:(UIApplication *)application
-{
-    DDLogInfo(@"Configuring Parse framework");
-
-    [Parse setApplicationId:<#applicationId#> clientKey:<#clientKey#>];
+- (void)configurePushNotifications:(UIApplication *)application {
+    DDLogInfo(@"Configuring Push Notifications");
 
     [self registerForPushNotifications:application];
 }
 
-#pragma mark - Push Notifications
-
-- (void)registerForPushNotifications:(UIApplication *)application
-{
+- (void)registerForPushNotifications:(UIApplication *)application {
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
       UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
       UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
@@ -59,23 +51,18 @@
     }
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     DDLogDebug(@"Did register for remote notifications with deviceToken %@", deviceToken);
 
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:deviceToken];
-    [currentInstallation saveInBackground];
+    // TODO:
 }
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     DDLogError(@"Did fail to register for remote notifications with error %@", error);
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    [PFPush handlePush:userInfo];
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+  // TODO:
 }<% end %>
 <% if enable_googleanalytics %>
 #pragma mark - Google Analytics

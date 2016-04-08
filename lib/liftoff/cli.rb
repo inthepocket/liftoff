@@ -57,8 +57,8 @@ module Liftoff
           @options[:use_crashlytics] = use_crashlytics
         end
 
-        opts.on('--[no-]parse', 'Enable Parse') do |enable_parse|
-          @options[:enable_parse] = enable_parse
+        opts.on('--[no-]push', 'Enable Push Notifications') do |enable_push|
+          @options[:enable_push] = enable_push
         end
 
         opts.on('--[no-]googleanalytics', 'Enable GoogleAnalytics') do |enable_googleanalytics|

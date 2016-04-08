@@ -17,10 +17,10 @@ use_crashlytics: true
 dependency_managers: cocoapods
 enable_settings: true
 strict_prompts: false
-enable_parse: true
 enable_googleanalytics: true
 deployment_target: 8.0
 
+enable_push: true
 run_script_phases:
   - file: todo.sh
     name: Warn for TODO and FIXME comments
